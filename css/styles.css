@@ -1,0 +1,96 @@
+/******************************************
+/* GENERAL STYLES
+/*******************************************/
+
+
+*{
+    font-size: 62.5%;
+    font-family:'Times New Roman', Times, serif;
+    box-sizing: border-box;
+}
+
+h1{
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+}
+
+span{
+    font-size: 2rem;
+}
+
+h2{
+    font-size: 2.5rem;
+}
+
+p{
+    font-size: 2rem;
+}
+
+#begin-button{
+    font-size: 3rem;
+    background-color: rgb(163, 157, 157);
+    border: 1px solid rgb(131, 126, 126);
+    border-radius: 5%;
+    padding: 1rem;
+}
+
+.hidden > *{
+	display: none;
+}
+
+/******************************************
+/* HEADER STYLES
+/*******************************************/
+
+header{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+
+nav{
+    width: 100%;
+}
+
+ul{
+    padding: 1rem;
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+li{
+    padding: 1rem;
+    font-size: 1.5rem;
+}
+
+li:hover{
+    background-color: rgb(165, 165, 165);;
+}
+
+/******************************************
+/* MAIN STYLES
+/*******************************************/
+ #intro-page, #question-page{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    padding-top: 2rem;
+ }
+
+ #question{
+    font-size: 4.5rem;
+    font-weight: 100;
+    text-align: center;
+    width: 75%;
+ }
+
+
+ 
+
