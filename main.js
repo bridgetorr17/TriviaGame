@@ -38,7 +38,7 @@ class TriviaGame{
             .then(res => res.json()) // parse response as JSON
             .then(data => {
                 this.displayQuestion(data);
-                this.displayAnswers(data);
+                this.displayChoices(data);
             })
             .catch(err => {
                 console.log(`error ${err}`)
@@ -57,11 +57,39 @@ class TriviaGame{
         document.querySelector('#question').innerHTML = currentQ.results[0].question;
     }
 
-    displayAnswers(currentQ){
+    displayChoices(currentQ){
         //display answers
-        let correctAnswer = currentQ.results[0].correct_answer;
+        const correctAnswer = currentQ.results[0].correct_answer;
+        const otherChoices = currentQ.results[0].incorrect_answers;
+        
+        let choices = [correctAnswer, ...otherChoices]
+        let choicesDisplay = choices.slice(0,choices.length);
+        
+        let randomIndex
 
+        //display choices to user in a random order
+        for(let i=0; i<choices.length; i++){
+            //get random index of elements left to display
+            randomIndex = currentQ.type === 'boolean' ? Math.random()*2 : Math.random()*4;
+            randomIndex = Math.floor(randomIndex);
+            // console.log(`the random index for a ${4-i} length array was ${randomIndex}`);
+            // console.log(i);
+            
+            console.log(choicesDisplay);
+            console.log(choicesDisplay[randomIndex]);
 
+            //create the html element
+            // let li = document.createElement('li');
+            // li.textContent = choicesDisplay[randomIndex];
+            // console.log(li.innerHTML);
+
+            // document.querySelector('#choices').appendChild(li);
+
+           
+
+            choicesDisplay.splice(randomIndex, 1);
+        }
+        
         //add event listeners to each answer
             //when clicked, all answer is revealed 
     }
