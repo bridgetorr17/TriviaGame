@@ -6,9 +6,9 @@ This is a trivia game using this [opensource API](https://opentdb.com/api_config
 
 There are multiple categories for the user to answer questions about. 
 
-## Want to play?
+## How to play the game
 
-Download/fork the repo and play locally on your machine. The game will eventually be put it online and linked from [bridgetorr17's portoflio](https://bridget-orr.netlify.app/)
+Download/fork the repo and play locally on your machine by opening index.html. Choose from a category and answer questions. The game will eventually be put online and linked from [bridgetorr17's portoflio](https://bridget-orr.netlify.app/)
 
 ## Want to contribute? - BEGINNER FRIENDLY 
 
