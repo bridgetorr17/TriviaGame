@@ -14,17 +14,14 @@ let GAMES = [null, null, null, null, null, null, null]
 //event listeners for each category game
 document.querySelectorAll('#category li').forEach((category, index) => {
     category.addEventListener('click', () => {
-        if (GAMES[index] === null){
-
-            //create a new game object 
-            GAMES[index] = new TriviaGame(CATNUMS[index]);
-        }
+        //create a new game object 
+        GAMES[index] = new TriviaGame(CATNUMS[index]);
     });
 });
 
 //Each category's respective game is an object
-class TriviaGame{
-    constructor(category){
+class TriviaGame {
+    constructor(category) {
         this.category = category;
         this.difficulty = 'easy';
         this.score = 0;
@@ -32,9 +29,9 @@ class TriviaGame{
         this.makeAPICall();
     }
 
-    makeAPICall(){
+    makeAPICall() {
         let url = `https://opentdb.com/api.php?amount=1&category=${this.category}&difficulty=${this.difficulty}`
-    
+
         //API call
         fetch(url)
             .then(res => res.json()) // parse response as JSON
@@ -49,32 +46,32 @@ class TriviaGame{
             });
     }
 
-    displayQuestion(currentQ){
+    displayQuestion(currentQ) {
         let questionInfo = currentQ.results[0];
         console.log(questionInfo);
 
         //question type
-        if(questionInfo.type === 'boolean') document.querySelector('#question-type').innerHTML = 'True or False?';
+        if (questionInfo.type === 'boolean') document.querySelector('#question-type').innerHTML = 'True or False?';
         else document.querySelector('#question-type').innerHTML = 'Multiple Choice:';
 
         //question 
         document.querySelector('#question').innerHTML = currentQ.results[0].question;
     }
 
-    displayChoices(currentQ){
+    displayChoices(currentQ) {
 
         //get answers
         const correctAnswer = currentQ.results[0].correct_answer;
         const otherChoices = currentQ.results[0].incorrect_answers;
-        
+
         //combine to one array
         let choices = [correctAnswer, ...otherChoices]
-        let choicesDisplay = choices.slice(0,choices.length);
-        
+        let choicesDisplay = choices.slice(0, choices.length);
+
         let randomIndex = 0;
 
         //display choices to user in a random order
-        for(let i=choices.length; i>0; i--){
+        for (let i = choices.length; i > 0; i--) {
 
             //get random index of elements left to display
             randomIndex = Math.floor(Math.random() * i);
@@ -82,7 +79,7 @@ class TriviaGame{
             //remove that element from array
             let removedChoice = choicesDisplay.splice(randomIndex, 1);
             console.log(`removed ${removedChoice}, remaining choices are ${choicesDisplay}`)
-            
+
             //create the html element
             let li = document.createElement('li');
             li.textContent = removedChoice;
@@ -94,17 +91,17 @@ class TriviaGame{
         }
     }
 
-    eventListenerforChoice(li, correctAnswer){
+    eventListenerforChoice(li, correctAnswer) {
         li.addEventListener('click', () => {
 
             //if user picked correct answer...
-            if(li.innerHTML === correctAnswer){
+            if (li.innerHTML === correctAnswer) {
                 li.style.backgroundColor = 'rgb(80, 166, 84)';
                 this.nextQuestion(true, correctAnswer);
             }
 
             //otherwise they picked the wrong answer
-            else{
+            else {
                 li.style.backgroundColor = 'rgb(201, 60, 60)';
                 this.nextQuestion(false, correctAnswer);
             }
@@ -112,14 +109,14 @@ class TriviaGame{
     }
 
     //move forward in the game here
-    nextQuestion(result, correctAnswer){
+    nextQuestion(result, correctAnswer) {
 
         //display result to user
         let resultMessage = document.createElement('span');
-        if(result){
+        if (result) {
             resultMessage.innerHTML = 'That\'s correct!';
         }
-        else{
+        else {
             resultMessage.innerHTML = `Wrong, correct answer was ${correctAnswer}`;
         }
 
