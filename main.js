@@ -11,10 +11,12 @@ CATEGORY NUMBERS FOR API CALLS
 const CATNUMS = [9, 21, 22, 23, 24, 26, 27];
 let GAMES = [null, null, null, null, null, null, null]
 
-//make event listeners for each category
+//event listeners for each category game
 document.querySelectorAll('#category li').forEach((category, index) => {
     category.addEventListener('click', () => {
         if (GAMES[index] === null){
+
+            //create a new game object 
             GAMES[index] = new TriviaGame(CATNUMS[index]);
         }
     });
@@ -37,6 +39,8 @@ class TriviaGame{
         fetch(url)
             .then(res => res.json()) // parse response as JSON
             .then(data => {
+
+                //show API data (question and answers)
                 this.displayQuestion(data);
                 this.displayChoices(data);
             })
@@ -63,6 +67,7 @@ class TriviaGame{
         const correctAnswer = currentQ.results[0].correct_answer;
         const otherChoices = currentQ.results[0].incorrect_answers;
         
+        //combine to one array
         let choices = [correctAnswer, ...otherChoices]
         let choicesDisplay = choices.slice(0,choices.length);
         
@@ -83,16 +88,22 @@ class TriviaGame{
             li.textContent = removedChoice;
 
             document.querySelector('#choices').appendChild(li);
+
+            //listen for user's choice
             this.eventListenerforChoice(li, correctAnswer);
         }
     }
 
     eventListenerforChoice(li, correctAnswer){
         li.addEventListener('click', () => {
+
+            //if user picked correct answer...
             if(li.innerHTML === correctAnswer){
                 li.style.backgroundColor = 'rgb(80, 166, 84)';
                 this.nextQuestion(true, correctAnswer);
             }
+
+            //otherwise they picked the wrong answer
             else{
                 li.style.backgroundColor = 'rgb(201, 60, 60)';
                 this.nextQuestion(false, correctAnswer);
@@ -100,8 +111,10 @@ class TriviaGame{
         });
     }
 
+    //move forward in the game here
     nextQuestion(result, correctAnswer){
 
+        //display result to user
         let resultMessage = document.createElement('span');
         if(result){
             resultMessage.innerHTML = 'That\'s correct!';
@@ -117,6 +130,7 @@ class TriviaGame{
         document.querySelector('#result').appendChild(resultMessage);
         document.querySelector('#result').appendChild(next);
 
+        //event listener for user to go onto next question
         document.querySelector('#nextButton').addEventListener('click', () => {
             //remove prev answers 
             document.querySelector('#choices').innerHTML = '';
