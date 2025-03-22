@@ -26,6 +26,10 @@ class TriviaGame {
         this.difficulty = 'easy';
         this.score = 0;
 
+        //categories that change per question
+        this.currentQuestion = null;
+        this.currentCorrectAnswer = null;
+
         this.makeAPICall();
     }
 
@@ -37,32 +41,39 @@ class TriviaGame {
             .then(res => res.json()) // parse response as JSON
             .then(data => {
 
+                //clear question and answers from previous API call
+                this.clear();
+
+                //store current question as object property
+                this.currentQuestion = data;
+
                 //show API data (question and answers)
-                this.displayQuestion(data);
-                this.displayChoices(data);
+                this.displayQuestion();
+                this.displayChoices();
             })
             .catch(err => {
                 console.log(`error ${err}`)
             });
     }
 
-    displayQuestion(currentQ) {
-        let questionInfo = currentQ.results[0];
-        console.log(questionInfo);
+    displayQuestion() {
+        let questionInfo = this.currentQuestion.results[0];
 
         //question type
         if (questionInfo.type === 'boolean') document.querySelector('#question-type').innerHTML = 'True or False?';
         else document.querySelector('#question-type').innerHTML = 'Multiple Choice:';
 
         //question 
-        document.querySelector('#question').innerHTML = currentQ.results[0].question;
+        document.querySelector('#question').innerHTML = this.currentQuestion.results[0].question;
     }
 
-    displayChoices(currentQ) {
+    displayChoices() {
 
         //get answers
-        const correctAnswer = currentQ.results[0].correct_answer;
-        const otherChoices = currentQ.results[0].incorrect_answers;
+        const correctAnswer = this.currentQuestion.results[0].correct_answer;
+        const otherChoices = this.currentQuestion.results[0].incorrect_answers;
+
+        this.currentCorrectAnswer = correctAnswer;
 
         //combine to one array
         let choices = [correctAnswer, ...otherChoices]
@@ -87,29 +98,29 @@ class TriviaGame {
             document.querySelector('#choices').appendChild(li);
 
             //listen for user's choice
-            this.eventListenerforChoice(li, correctAnswer);
+            this.eventListenerforChoice(li);
         }
     }
 
-    eventListenerforChoice(li, correctAnswer) {
+    eventListenerforChoice(li) {
         li.addEventListener('click', () => {
 
             //if user picked correct answer...
-            if (li.innerHTML === correctAnswer) {
+            if (li.innerHTML === this.currentCorrectAnswer) {
                 li.style.backgroundColor = 'rgb(80, 166, 84)';
-                this.nextQuestion(true, correctAnswer);
+                this.nextQuestion(true);
             }
 
             //otherwise they picked the wrong answer
             else {
                 li.style.backgroundColor = 'rgb(201, 60, 60)';
-                this.nextQuestion(false, correctAnswer);
+                this.nextQuestion(false);
             }
         });
     }
 
     //move forward in the game here
-    nextQuestion(result, correctAnswer) {
+    nextQuestion(result) {
 
         //display result to user
         let resultMessage = document.createElement('span');
@@ -117,7 +128,7 @@ class TriviaGame {
             resultMessage.innerHTML = 'That\'s correct!';
         }
         else {
-            resultMessage.innerHTML = `Wrong, correct answer was ${correctAnswer}`;
+            resultMessage.innerHTML = `Wrong, correct answer was ${this.currentCorrectAnswer}`;
         }
 
         let next = document.createElement('button');
@@ -129,11 +140,15 @@ class TriviaGame {
 
         //event listener for user to go onto next question
         document.querySelector('#nextButton').addEventListener('click', () => {
-            //remove prev answers 
-            document.querySelector('#choices').innerHTML = '';
-            document.querySelector('#result').innerHTML = '';
             this.makeAPICall();
         });
+    }
+
+    clear(){
+        console.log(`clearing`);
+        //remove prev answers 
+        document.querySelector('#choices').innerHTML = '';
+        document.querySelector('#result').innerHTML = '';
     }
 
 }
