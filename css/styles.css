@@ -12,7 +12,7 @@
 body{
     background: linear-gradient(to bottom, #84b6ce, #916acf);
     background-repeat: no-repeat;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 h1{
