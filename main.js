@@ -25,10 +25,15 @@ class TriviaGame {
         this.category = category;
         this.difficulty = 'easy';
         this.score = 0;
+        this.timer = 0;
 
         //categories that change per question
         this.currentQuestion = null;
         this.currentCorrectAnswer = null;
+
+        //nextButton
+        this.next = document.createElement('button');
+        this.next.id = 'nextButton'
 
         this.makeAPICall();
     }
@@ -40,6 +45,9 @@ class TriviaGame {
         fetch(url)
             .then(res => res.json()) // parse response as JSON
             .then(data => {
+
+                //start counter to limit API calls to 1 per every 5 seconds
+                this.timeDown();
 
                 //clear question and answers from previous API call
                 this.clear();
@@ -131,21 +139,39 @@ class TriviaGame {
             resultMessage.innerHTML = `Wrong, correct answer was ${this.currentCorrectAnswer}`;
         }
 
-        let next = document.createElement('button');
-        next.innerHTML = 'Next Question'
-        next.id = 'nextButton'
+
 
         document.querySelector('#result').appendChild(resultMessage);
-        document.querySelector('#result').appendChild(next);
+        document.querySelector('#result').appendChild(this.next);
 
-        //event listener for user to go onto next question
-        document.querySelector('#nextButton').addEventListener('click', () => {
-            this.makeAPICall();
-        });
+
+    }
+
+    timeDown(){
+        this.timer = 3;
+        let intervalId = setInterval(() => {
+            this.timer--;
+            console.log(this.timer);
+            this.next.innerHTML = this.timer;
+
+            if (this.timer <= 0){
+                clearInterval(intervalId);
+
+                this.next.innerHTML = 'Next Question';
+
+                
+                //event listener for user to go onto next question
+                document.querySelector('#nextButton').addEventListener('click', () => {
+                    this.makeAPICall();
+                });
+
+                console.log(`timer cleared`);
+            }   
+        }, 1000);
+
     }
 
     clear(){
-        console.log(`clearing`);
         //remove prev answers 
         document.querySelector('#choices').innerHTML = '';
         document.querySelector('#result').innerHTML = '';
