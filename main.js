@@ -107,6 +107,8 @@ class TriviaGame {
 
             //listen for user's choice
             this.eventListenerforChoice(li);
+
+            this.nextButton();
         }
     }
 
@@ -116,19 +118,19 @@ class TriviaGame {
             //if user picked correct answer...
             if (li.innerHTML === this.currentCorrectAnswer) {
                 li.style.backgroundColor = 'rgb(80, 166, 84)';
-                this.nextQuestion(true);
+                this.displayResult(true);
             }
 
             //otherwise they picked the wrong answer
             else {
                 li.style.backgroundColor = 'rgb(201, 60, 60)';
-                this.nextQuestion(false);
+                this.displayResult(false);
             }
         });
     }
 
     //move forward in the game here
-    nextQuestion(result) {
+    displayResult(result) {
 
         //display result to user
         let resultMessage = document.createElement('span');
@@ -142,13 +144,20 @@ class TriviaGame {
 
 
         document.querySelector('#result').appendChild(resultMessage);
+        
+    }
+
+    nextButton(){
+        //event listener for user to go onto next question
+        this.next.addEventListener('click', () => {
+            this.makeAPICall();
+        });
+
         document.querySelector('#result').appendChild(this.next);
-
-
     }
 
     timeDown(){
-        this.timer = 3;
+        this.timer = 5;
         let intervalId = setInterval(() => {
             this.timer--;
             console.log(this.timer);
@@ -158,12 +167,6 @@ class TriviaGame {
                 clearInterval(intervalId);
 
                 this.next.innerHTML = 'Next Question';
-
-                
-                //event listener for user to go onto next question
-                document.querySelector('#nextButton').addEventListener('click', () => {
-                    this.makeAPICall();
-                });
 
                 console.log(`timer cleared`);
             }   
