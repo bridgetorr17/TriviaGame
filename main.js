@@ -52,8 +52,22 @@ class TriviaGame {
                 this.displayChoices();
                 this.showTimer();
             })
+
+            //error handling of 429: API too many requests
             .catch(err => {
-                console.log(`error ${err}`)
+                console.log(`error ${err}`);
+                let timeLeft = 3;
+                document.querySelector('#timeLeft').innerHTML = timeLeft;
+                document.querySelector('#errorMessage').classList.toggle('hidden');
+                let intervalId = setInterval(() => {
+                    timeLeft--;
+                    document.querySelector('#timeLeft').innerHTML = timeLeft;
+                    if(timeLeft <= 0) {
+                        document.querySelector('#errorMessage').classList.toggle('hidden');
+                        clearInterval(intervalId);
+                        this.makeAPICall();
+                    }
+                },1000);
             });
     }
 
