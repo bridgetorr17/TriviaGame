@@ -132,5 +132,19 @@ li:hover{
  }
  */
 
+.timerSuggestion{
+    width: 10%;
+    background: rgb(228, 228, 228);
+    position: fixed;
+
+    bottom: 0;
+    left: 0;
+}
+
+.timerSuggestion span{
+    font-size: larger;
+    font-weight: bolder;
+}
+
  
 
