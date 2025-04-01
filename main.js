@@ -50,7 +50,6 @@ class TriviaGame {
                 //show API data (question and answers)
                 this.displayQuestion();
                 this.displayChoices();
-                this.showTimer();
             })
 
             //error handling of 429: API too many requests
@@ -164,19 +163,6 @@ class TriviaGame {
         //remove prev answers 
         document.querySelector('#choices').innerHTML = '';
         document.querySelector('#result').innerHTML = '';
-    }
-
-    showTimer(){
-        //show timer text
-        document.querySelector('.timerSuggestion').hidden = false;
-
-        let timer = 6;
-        let intervalId = setInterval(() => {
-            timer--;
-            document.querySelector('.countdown').innerHTML = timer;
-
-            if(timer <= 0) clearInterval(intervalId);
-        }, 1000);
     }
 
 }
